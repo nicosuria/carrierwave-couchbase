@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 require 'carrierwave'
+require 'couchbase'
+require 'couchbase-model'
 require 'carrierwave/validations/active_model'
-
 
 module CarrierWave
   module Couchbase
@@ -33,7 +34,7 @@ module CarrierWave
       class_eval <<-RUBY, __FILE__, __LINE__+1
         def #{column}=(new_file)
           column = _mounter(:#{column}).serialization_column
-          send(:"\#{column}_will_change!")
+          # send(:"\#{column}_will_change!")
           super
         end
 
@@ -48,11 +49,10 @@ module CarrierWave
           end
           super(options).merge(hash)
         end
+
       RUBY
     end
   end # Couchbase-Model
 end # CarrierWave
-
-
 
 Couchbase::Model.extend CarrierWave::Couchbase
